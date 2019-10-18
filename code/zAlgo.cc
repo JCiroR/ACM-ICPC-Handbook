@@ -1,16 +1,17 @@
 /* Z algorithm for matching substrings. KMP's Brother */
 
-vector<int> zfunction(char *s) {
-  int N = strlen(s), a=0, b=0;
-  vector<int> z(N, N);
-  for (int i = 1; i < N; i++) {
-    int k = i<b ? min(b-i, z[i-a]) : 0;
-    while (i+k < N && s[i+k]==s[k]) ++k;
-    z[i] = k;
-    if (i+k > b) { a=i; b=i+k; }
-  }
-  return z;
-}
+const int MAXN = 2e5 + 2e4;
 
-Definition:
-z[i] = max {k: s[i..i+k-1]=s[0..k-1]}
+int z[MAXN];
+string s;
+
+void z_algo() {
+    int n = s.size();
+    int x = 0, y = 0;
+    for (int i = 1; i < n; i++) {
+        z[i] = max(0, min(z[i-x], y-i+1));
+        while (i+z[i] < n && s[z[i]] == s[i+z[i]]) {
+            x = i; y = i+z[i]; z[i]++;
+        }
+    }
+}
